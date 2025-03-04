@@ -1,0 +1,11 @@
+# identifying the Top 5% of High-Value Customers
+
+SELECT customer_id, customer_name, total_spent
+FROM (
+    SELECT c.customer_id, c.customer_name, SUM(t.transaction_amount) AS total_spent,
+           PERCENT_RANK() OVER (ORDER BY SUM(t.transaction_amount) DESC) AS percentile_rank
+    FROM customers c
+    JOIN transactions t ON c.customer_id = t.customer_id
+    GROUP BY c.customer_id, c.customer_name
+) ranked_customers
+WHERE percentile_rank <= 0.05;
