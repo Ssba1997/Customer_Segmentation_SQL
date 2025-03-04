@@ -1,0 +1,10 @@
+# Finding the Most Popular Product Categories by Region
+SELECT r.region_name, p.category, COUNT(t.transaction_id) AS total_sales,
+       RANK() OVER (PARTITION BY r.region_name ORDER BY COUNT(t.transaction_id) DESC) AS rank
+FROM transactions t
+JOIN products p ON t.product_id = p.product_id
+JOIN customers c ON t.customer_id = c.customer_id
+JOIN regions r ON c.region_id = r.region_id
+GROUP BY r.region_name, p.category
+HAVING COUNT(t.transaction_id) > 100
+ORDER BY r.region_name, rank;
