@@ -1,0 +1,9 @@
+# Customer Lifetime Value Analysis (Using Joins & Aggregations)
+SELECT c.customer_id, c.customer_name, 
+       SUM(t.transaction_amount) AS total_spent, 
+       COUNT(t.transaction_id) AS total_transactions,
+       AVG(t.transaction_amount) AS avg_transaction_value
+FROM customers c
+JOIN transactions t ON c.customer_id = t.customer_id
+GROUP BY c.customer_id, c.customer_name
+ORDER BY total_spent DESC;
